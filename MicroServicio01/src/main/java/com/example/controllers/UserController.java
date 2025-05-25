@@ -36,7 +36,7 @@ public class UserController {
         return userService.obtenerPorId(id);
     }
 
-    @PostMapping("/")
+    @PostMapping
     public User registrar(@Valid @RequestBody UserCreate body) {
         return userService.registrar(body);
     }
