@@ -10,7 +10,7 @@ import com.example.api_perfume.models.entities.Reporte;
 import com.example.api_perfume.repository.ReporteRepository;
 
 @Service
-public class Reporteservice {
+public class ReporteService {
 
     @Autowired
     private ReporteRepository reporteRepository;

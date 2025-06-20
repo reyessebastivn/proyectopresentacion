@@ -17,14 +17,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.api_perfume.models.entities.Reporte;
-import com.example.api_perfume.services.Reporteservice;
+import com.example.api_perfume.services.ReporteService;
 
 @RestController
 @RequestMapping("/api/reportes")
 public class ReporteController {
 
     @Autowired
-    private Reporteservice reporteService;
+    private ReporteService reporteService;
 
     @GetMapping
     public List<Reporte> listarTodos() {
