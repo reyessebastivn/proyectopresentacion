@@ -1,0 +1,57 @@
+package com.example.api_perfume.controllers;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.example.api_perfume.models.entities.Envio;
+import com.example.api_perfume.services.EnvioService;
+
+@RestController
+@RequestMapping("/api/envios")
+public class EnvioController {
+
+    @Autowired
+    private EnvioService envioService;
+
+    @GetMapping
+    public List<Envio> obtenerTodos() {
+        return envioService.listarTodos();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Envio> obtenerPorId(@PathVariable Long id) {
+        return envioService.obtenerPorId(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PostMapping
+    public Envio crear(@RequestBody Envio envio) {
+        return envioService.crear(envio);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Envio> actualizar(@PathVariable Long id, @RequestBody Envio envio) {
+        Envio actualizado = envioService.actualizar(id, envio);
+        if (actualizado == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(actualizado);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
+        envioService.eliminar(id);
+        return ResponseEntity.noContent().build();
+    }
+}
