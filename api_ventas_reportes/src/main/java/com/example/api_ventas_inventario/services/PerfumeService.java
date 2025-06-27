@@ -7,9 +7,9 @@ import com.example.api_ventas_inventario.models.Perfume;
 
 public interface PerfumeService {
     
-    List<Perfume>getAllPerfumes();
-    Optional<Perfume> getPerfumeById(Long id);
-    Perfume savePerfume(Perfume perfume);
-    void deletePerfume(Long id);
+    List<Perfume>obtenerTodo();
+    Optional<Perfume> findById(Long id);
+    Perfume save(Perfume perfume);
+    void deleteById(Long id);
 
 }

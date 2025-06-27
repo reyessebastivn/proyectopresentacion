@@ -29,24 +29,24 @@ public class PerfumeController {
     // Obtener todos los perfumes
     @GetMapping
     public List<Perfume> getAllPerfumes() {
-        return perfumeService.getAllPerfumes();
+        return perfumeService.obtenerTodo();
     }
 
     // Obtener un perfume por ID
     @GetMapping("/{id}")
     public Optional<Perfume> getPerfumeById(@PathVariable Long id) {
-        return perfumeService.getPerfumeById(id);
+        return perfumeService.findById(id);
     }
 
     // Crear o actualizar un perfume
     @PostMapping
     public Perfume savePerfume(@RequestBody Perfume perfume) {
-        return perfumeService.savePerfume(perfume);
+        return perfumeService.save(perfume);
     }
 
     // Eliminar un perfume por ID
     @DeleteMapping("/{id}")
     public void deletePerfume(@PathVariable Long id) {
-        perfumeService.deletePerfume(id);
+        perfumeService.deleteById(id);
     }
 }

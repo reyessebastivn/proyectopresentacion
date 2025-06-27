@@ -15,22 +15,22 @@ public class PerfumeServiceImpl implements PerfumeService {
     private PerfumeRepository perfumeRepository;
 
     @Override
-    public List<Perfume> getAllPerfumes() {
+    public List<Perfume> obtenerTodo() {
         return perfumeRepository.findAll();
     }
 
     @Override
-    public Optional<Perfume> getPerfumeById(Long id) {
+    public Optional<Perfume> findById(Long id) {
         return perfumeRepository.findById(id);
     }
 
     @Override
-    public Perfume savePerfume(Perfume perfume) {
+    public Perfume save(Perfume perfume) {
         return perfumeRepository.save(perfume);
     }
 
     @Override
-    public void deletePerfume(Long id) {
+    public void deleteById(Long id) {
         perfumeRepository.deleteById(id);
     }
 }
