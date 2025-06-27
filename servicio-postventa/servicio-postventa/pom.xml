@@ -5,13 +5,13 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.5.2</version>
+		<version>3.5.3</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example</groupId>
-	<artifactId>api_Transacciones-Ordenes</artifactId>
+	<artifactId>servicio-postventa</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>api_Transacciones-Ordenes</name>
+	<name>servicio-postventa</name>
 	<description>Demo project for Spring Boot</description>
 	<url/>
 	<licenses>

@@ -1,10 +1,10 @@
-package com.example.api_Transacciones.Ordenes;
+package com.example.servicio_postventa;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class ApplicationTests {
+class ServicioPostventaApplicationTests {
 
 	@Test
 	void contextLoads() {
