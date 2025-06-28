@@ -18,7 +18,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("autorizacion")
+@RequestMapping("auth")
 public class AutheticationController {
 
 
@@ -39,7 +39,7 @@ public class AutheticationController {
     }
 
     @GetMapping("yo")
-    @SecurityRequirement(name = "bearerAutorizacion")
+    @SecurityRequirement(name = "bearerAuth")
     public Perfume misDatos(@Parameter(hidden = true) @RequestHeader("Authorization") String authHeader) {
         Perfume perfume = jwtService.comprobarToken(authHeader);
         return perfume;
