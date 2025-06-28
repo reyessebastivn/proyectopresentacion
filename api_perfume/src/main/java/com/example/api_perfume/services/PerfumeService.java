@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.security.*;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.example.api_perfume.models.ModificarPerfume;
 import com.example.api_perfume.models.Perfume;
@@ -43,6 +45,16 @@ public class PerfumeService {
         Perfume p = obtenerUno(id);
         p.setPrecio(modificarperfume.getPrecio());
         repo.save(p); // Guarda los cambios en la base de datos
+    }
+
+    public String hashearPassword(String password) {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        return passwordEncoder.encode(password); 
+    }
+
+    public boolean comprobarPassword(String hash,String password) {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        return passwordEncoder.matches(password,hash); 
     }
 
     public Perfume save(Perfume perfume) {
