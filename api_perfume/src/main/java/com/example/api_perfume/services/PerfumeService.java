@@ -1,6 +1,7 @@
 package com.example.api_perfume.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,6 +11,8 @@ import org.springframework.web.server.ResponseStatusException;
 import com.example.api_perfume.models.ModificarPerfume;
 import com.example.api_perfume.models.Perfume;
 import com.example.api_perfume.repository.PerfumeRepository;
+
+import jakarta.validation.Valid;
 
 @Service
 public class PerfumeService {
@@ -40,5 +43,20 @@ public class PerfumeService {
         Perfume p = obtenerUno(id);
         p.setPrecio(modificarperfume.getPrecio());
         repo.save(p); // Guarda los cambios en la base de datos
+    }
+
+    public Perfume save(Perfume perfume) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'save'");
+    }
+
+    public Optional<Perfume> findById(Long id) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'findById'");
+    }
+
+    public String intentarLogin(Object id, Object password) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'intentarLogin'");
     }
 }
