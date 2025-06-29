@@ -6,6 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.Data;
 
 @Entity
@@ -19,6 +20,6 @@ public class Envio {
 
     private String destino;
     private String estado;
-    private LocalDate fechaEnvio;
+    private String fechaEnvio;
     private String transportista;
 }

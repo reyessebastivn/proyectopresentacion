@@ -1,14 +1,23 @@
 package com.example.api_perfume.controllers;
 
-import com.example.api_perfume.models.entities.Envio;
-import com.example.api_perfume.services.EnvioService;
-import jakarta.validation.Valid;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import com.example.api_perfume.models.entities.Envio;
+import com.example.api_perfume.services.EnvioService;
+
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/envios")
@@ -30,9 +39,9 @@ public class EnvioController {
     }
 
     @PostMapping
-    public ResponseEntity<Envio> crear(@Valid @RequestBody Envio envio) {
-        Envio creado = envioService.crear(envio);
-        return ResponseEntity.status(HttpStatus.CREATED).body(creado);
+    public ResponseEntity<Envio> crearEnvio(@RequestBody Envio envio) {
+        Envio nuevoEnvio = envioService.guardarEnvio(envio);
+        return new ResponseEntity<>(nuevoEnvio, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")

@@ -1,16 +1,9 @@
 package com.example.api_perfume;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
-import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -34,20 +27,20 @@ class EnvioServiceTest {
     @InjectMocks
     private EnvioService envioService;
 
-    private Envio crearEnvio(Long id, String destino, String estado, String transportista) {
+    private Envio crearEnvio(Long id, String destino, String estado, String fechaEnvio, String transportista) {
         Envio envio = new Envio();
         envio.setId(id);
         envio.setDestino(destino);
         envio.setEstado(estado);
-        envio.setFechaEnvio(LocalDate.now());
+        envio.setFechaEnvio(fechaEnvio);   // Ahora fecha como String
         envio.setTransportista(transportista);
         return envio;
     }
 
     @Test
     void testListarTodos() {
-        Envio envio1 = crearEnvio(1L, "Santiago", "Pendiente", "Juan");
-        Envio envio2 = crearEnvio(2L, "Valparaíso", "En camino", "Pedro");
+        Envio envio1 = crearEnvio(1L, "Santiago", "Pendiente", "2025-06-29", "Juan");
+        Envio envio2 = crearEnvio(2L, "Valparaíso", "En camino", "2025-06-30", "Pedro");
 
         when(envioRepository.findAll()).thenReturn(Arrays.asList(envio1, envio2));
 
@@ -59,7 +52,7 @@ class EnvioServiceTest {
 
     @Test
     void testObtenerPorId_existente() {
-        Envio envio = crearEnvio(1L, "Santiago", "Entregado", "Luis");
+        Envio envio = crearEnvio(1L, "Santiago", "Entregado", "2025-07-01", "Luis");
 
         when(envioRepository.findById(1L)).thenReturn(Optional.of(envio));
 
@@ -80,12 +73,12 @@ class EnvioServiceTest {
 
     @Test
     void testCrear() {
-        Envio nuevo = crearEnvio(null, "Temuco", "Pendiente", "Carlos");
-        Envio guardado = crearEnvio(3L, "Temuco", "Pendiente", "Carlos");
+        Envio nuevo = crearEnvio(null, "Temuco", "Pendiente", "2025-07-02", "Carlos");
+        Envio guardado = crearEnvio(3L, "Temuco", "Pendiente", "2025-07-02", "Carlos");
 
         when(envioRepository.save(nuevo)).thenReturn(guardado);
 
-        Envio resultado = envioService.crear(nuevo);
+        Envio resultado = envioService.guardarEnvio(nuevo);
 
         assertNotNull(resultado.getId());
         assertEquals("Temuco", resultado.getDestino());
@@ -93,8 +86,8 @@ class EnvioServiceTest {
 
     @Test
     void testActualizar_existente() {
-        Envio existente = crearEnvio(1L, "Iquique", "Pendiente", "Raúl");
-        Envio actualizado = crearEnvio(null, "Arica", "Entregado", "María");
+        Envio existente = crearEnvio(1L, "Iquique", "Pendiente", "2025-07-03", "Raúl");
+        Envio actualizado = crearEnvio(null, "Arica", "Entregado", "2025-07-04", "María");
 
         when(envioRepository.findById(1L)).thenReturn(Optional.of(existente));
         when(envioRepository.save(any(Envio.class))).thenAnswer(invoc -> invoc.getArgument(0));
@@ -104,11 +97,12 @@ class EnvioServiceTest {
         assertEquals("Arica", resultado.getDestino());
         assertEquals("Entregado", resultado.getEstado());
         assertEquals("María", resultado.getTransportista());
+        assertEquals("2025-07-04", resultado.getFechaEnvio());
     }
 
     @Test
     void testActualizar_noExistente() {
-        Envio actualizado = crearEnvio(null, "La Serena", "Pendiente", "Mario");
+        Envio actualizado = crearEnvio(null, "La Serena", "Pendiente", "2025-07-05", "Mario");
 
         when(envioRepository.findById(99L)).thenReturn(Optional.empty());
 

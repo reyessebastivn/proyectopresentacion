@@ -6,7 +6,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;  // ✅ SOLO lo usamos para la documentación
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,8 +52,8 @@ public class EnvioControllerV2 {
                 )
         )
     )
-    public ResponseEntity<Envio> crear(@Valid @RequestBody Envio envio) {
-        Envio creado = envioService.crear(envio);
+    public ResponseEntity<Envio> crear(@Valid @org.springframework.web.bind.annotation.RequestBody Envio envio) {
+        Envio creado = envioService.guardarEnvio(envio);
         return ResponseEntity.status(HttpStatus.CREATED).body(creado);
     }
 
@@ -72,7 +72,7 @@ public class EnvioControllerV2 {
     public ResponseEntity<Envio> actualizar(
             @Parameter(description = "ID del envío a actualizar", example = "1")
             @PathVariable Long id,
-            @Valid @RequestBody Envio envio) {
+            @Valid @org.springframework.web.bind.annotation.RequestBody Envio envio) {
         Envio actualizado = envioService.actualizar(id, envio);
         if (actualizado == null) {
             return ResponseEntity.notFound().build();
