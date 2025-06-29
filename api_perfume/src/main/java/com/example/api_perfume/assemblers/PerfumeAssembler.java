@@ -8,7 +8,7 @@ import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.stereotype.Component;
 
 import com.example.api_perfume.controllers.PerfumeControllerV2;
-import com.example.api_perfume.models.Perfume;
+import com.example.api_perfume.models.entities.Perfume;
 
 @Component
 public class PerfumeAssembler implements RepresentationModelAssembler<Perfume, EntityModel<Perfume>> {

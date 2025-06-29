@@ -6,15 +6,16 @@ import lombok.Data;
 
 @Data
 public class UserCreate {
-    @NotBlank
+
+    @NotBlank(message = "El nombre no puede estar vacío")
     private String nombre;
-    @NotBlank
-    @Email
+
+    @NotBlank(message = "El email no puede estar vacío")
+    @Email(message = "El formato del email no es válido")
     private String email;
-    
-    @NotBlank
+
+    @NotBlank(message = "La contraseña no puede estar vacía")
     private String password;
 
     private String telefono;
-
 }

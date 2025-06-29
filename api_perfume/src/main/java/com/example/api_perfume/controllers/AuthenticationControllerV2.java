@@ -1,6 +1,6 @@
 package com.example.api_perfume.controllers;
 
-import com.example.api_perfume.models.Perfume;
+import com.example.api_perfume.models.entities.Perfume;
 import com.example.api_perfume.models.responses.LoginResponse;
 import com.example.api_perfume.services.JwtService;
 import com.example.api_perfume.services.PerfumeService;

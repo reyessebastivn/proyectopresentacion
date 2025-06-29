@@ -6,13 +6,12 @@ import lombok.Data;
 @Data
 public class UserUpdate {
 
-    @NotNull
+    @NotNull(message = "El id del usuario es obligatorio para actualizar")
     private Integer id;
     
     private String nombre;
+
     private String password;
+
     private String telefono;
-
-
-
 }

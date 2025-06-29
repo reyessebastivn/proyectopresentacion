@@ -6,8 +6,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import com.example.api_perfume.models.CompraRequest;
 import com.example.api_perfume.models.CompraResponse;
-import com.example.api_perfume.models.Perfume;
 import com.example.api_perfume.models.User;
+import com.example.api_perfume.models.entities.Perfume;
 import com.example.api_perfume.services.PerfumeService;
 
 import jakarta.validation.Valid;

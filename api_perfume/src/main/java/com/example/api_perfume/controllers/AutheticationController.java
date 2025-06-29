@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.api_perfume.models.Perfume;
+import com.example.api_perfume.models.entities.Perfume;
 import com.example.api_perfume.models.responses.LoginResponse;
 import com.example.api_perfume.services.JwtService;
 import com.example.api_perfume.services.PerfumeService;

@@ -1,7 +1,7 @@
 package com.example.api_perfume.controllers;
 
 import com.example.api_perfume.assemblers.PerfumeAssembler;
-import com.example.api_perfume.models.Perfume;
+import com.example.api_perfume.models.entities.Perfume;
 import com.example.api_perfume.services.PerfumeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

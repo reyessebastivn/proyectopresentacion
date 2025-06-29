@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.example.api_perfume.models.ModificarPerfume;
-import com.example.api_perfume.models.Perfume;
+import com.example.api_perfume.models.entities.Perfume;
 import com.example.api_perfume.repository.PerfumeRepository;
 
 import jakarta.validation.Valid;
