@@ -20,11 +20,11 @@ public class Reporte {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String tipo; // "ventas", "inventario", "rendimiento"
-    private String sucursal; // nombre o código de sucursal
+    private String tipo; 
+    private String sucursal; 
     private LocalDate fechaGeneracion;
 
     @Column(columnDefinition = "TEXT")
-    private String contenido; // Reporte en texto o resumen de datos
+    private String contenido; 
     
 }

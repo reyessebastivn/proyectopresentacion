@@ -20,13 +20,13 @@ public class Pedido {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String sucursal; // Puedes convertirlo a entidad si lo necesitas
+    private String sucursal;
     private LocalDate fechaPedido;
 
     @Column(columnDefinition = "TEXT")
-    private String productosSolicitados; // JSON o texto plano por ahora (ej: "ProductoA:10, ProductoB:5")
+    private String productosSolicitados; 
 
-    private String estado; // "pendiente", "autorizado", "rechazado", "recibido"
+    private String estado; 
 
     private String observaciones;
     

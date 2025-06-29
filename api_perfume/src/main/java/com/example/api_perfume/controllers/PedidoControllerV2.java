@@ -4,8 +4,13 @@ import com.example.api_perfume.models.entities.Pedido;
 import com.example.api_perfume.services.PedidoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,20 +40,34 @@ public class PedidoControllerV2 {
     }
 
     @PostMapping
-    @Operation(summary = "Crear un nuevo pedido", description = "Permite registrar un nuevo pedido en el sistema")
-    public ResponseEntity<Pedido> crear(
-            @Parameter(description = "Objeto Pedido con la información a registrar")
-            @RequestBody Pedido pedido) {
-        return ResponseEntity.ok(pedidoService.crear(pedido));
+    @Operation(
+        summary = "Crear un nuevo pedido",
+        description = "Permite registrar un nuevo pedido en el sistema",
+        requestBody = @RequestBody(
+                description = "Objeto Pedido con la información a registrar",
+                required = true,
+                content = @Content(schema = @Schema(implementation = Pedido.class))
+        )
+    )
+    public ResponseEntity<Pedido> crear(@Valid @org.springframework.web.bind.annotation.RequestBody Pedido pedido) {
+        Pedido creado = pedidoService.crear(pedido);
+        return ResponseEntity.status(HttpStatus.CREATED).body(creado);
     }
 
     @PutMapping("/{id}")
-    @Operation(summary = "Actualizar un pedido", description = "Permite modificar los datos de un pedido existente")
+    @Operation(
+        summary = "Actualizar un pedido",
+        description = "Permite modificar los datos de un pedido existente",
+        requestBody = @RequestBody(
+                description = "Datos actualizados del pedido",
+                required = true,
+                content = @Content(schema = @Schema(implementation = Pedido.class))
+        )
+    )
     public ResponseEntity<Pedido> actualizar(
             @Parameter(description = "ID del pedido a actualizar", example = "1")
             @PathVariable Long id,
-            @Parameter(description = "Datos actualizados del pedido")
-            @RequestBody Pedido pedido) {
+            @Valid @org.springframework.web.bind.annotation.RequestBody Pedido pedido) {
         Pedido actualizado = pedidoService.actualizar(id, pedido);
         return actualizado != null ? ResponseEntity.ok(actualizado) : ResponseEntity.notFound().build();
     }

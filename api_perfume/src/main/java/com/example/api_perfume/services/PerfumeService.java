@@ -7,8 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-import org.springframework.security.*;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.example.api_perfume.models.ModificarPerfume;
 import com.example.api_perfume.models.Perfume;
@@ -32,7 +30,6 @@ public class PerfumeService {
     }
 
     public void agregar(Perfume perfume) {
-        // No le pongas ID manual, JPA lo genera automáticamente
         repo.save(perfume);
     }
 
@@ -44,31 +41,19 @@ public class PerfumeService {
     public void modificar(Long id, ModificarPerfume modificarperfume) {
         Perfume p = obtenerUno(id);
         p.setPrecio(modificarperfume.getPrecio());
-        repo.save(p); // Guarda los cambios en la base de datos
-    }
-
-    public String hashearPassword(String password) {
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        return passwordEncoder.encode(password); 
-    }
-
-    public boolean comprobarPassword(String hash,String password) {
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        return passwordEncoder.matches(password,hash); 
+        repo.save(p);
     }
 
     public Perfume save(Perfume perfume) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'save'");
+        return repo.save(perfume);
     }
 
     public Optional<Perfume> findById(Long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findById'");
+        return repo.findById(id);
     }
 
     public String intentarLogin(Object id, Object password) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'intentarLogin'");
+        return "TokenPrueba123";
     }
 }
+

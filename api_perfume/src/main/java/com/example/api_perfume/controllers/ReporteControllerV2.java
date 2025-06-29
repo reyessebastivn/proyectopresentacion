@@ -4,9 +4,14 @@ import com.example.api_perfume.models.entities.Reporte;
 import com.example.api_perfume.services.ReporteService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,20 +42,34 @@ public class ReporteControllerV2 {
     }
 
     @PostMapping
-    @Operation(summary = "Crear un nuevo reporte", description = "Permite crear y guardar un nuevo reporte")
-    public ResponseEntity<Reporte> crear(
-            @Parameter(description = "Objeto reporte a crear")
-            @RequestBody Reporte reporte) {
-        return ResponseEntity.ok(reporteService.crear(reporte));
+    @Operation(
+        summary = "Crear un nuevo reporte",
+        description = "Permite crear y guardar un nuevo reporte",
+        requestBody = @RequestBody(
+                description = "Objeto reporte a crear",
+                required = true,
+                content = @Content(schema = @Schema(implementation = Reporte.class))
+        )
+    )
+    public ResponseEntity<Reporte> crear(@Valid @org.springframework.web.bind.annotation.RequestBody Reporte reporte) {
+        Reporte creado = reporteService.crear(reporte);
+        return ResponseEntity.status(HttpStatus.CREATED).body(creado);
     }
 
     @PutMapping("/{id}")
-    @Operation(summary = "Actualizar un reporte", description = "Permite actualizar los datos de un reporte existente")
+    @Operation(
+        summary = "Actualizar un reporte",
+        description = "Permite actualizar los datos de un reporte existente",
+        requestBody = @RequestBody(
+                description = "Datos actualizados del reporte",
+                required = true,
+                content = @Content(schema = @Schema(implementation = Reporte.class))
+        )
+    )
     public ResponseEntity<Reporte> actualizar(
             @Parameter(description = "ID del reporte a actualizar", example = "1")
             @PathVariable Long id,
-            @Parameter(description = "Datos actualizados del reporte")
-            @RequestBody Reporte reporte) {
+            @Valid @org.springframework.web.bind.annotation.RequestBody Reporte reporte) {
         Reporte actualizado = reporteService.actualizar(id, reporte);
         return actualizado != null ? ResponseEntity.ok(actualizado) : ResponseEntity.notFound().build();
     }

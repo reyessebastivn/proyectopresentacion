@@ -1,20 +1,14 @@
 package com.example.api_perfume.controllers;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.example.api_perfume.models.entities.Envio;
 import com.example.api_perfume.services.EnvioService;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/envios")
@@ -36,12 +30,13 @@ public class EnvioController {
     }
 
     @PostMapping
-    public Envio crear(@RequestBody Envio envio) {
-        return envioService.crear(envio);
+    public ResponseEntity<Envio> crear(@Valid @RequestBody Envio envio) {
+        Envio creado = envioService.crear(envio);
+        return ResponseEntity.status(HttpStatus.CREATED).body(creado);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Envio> actualizar(@PathVariable Long id, @RequestBody Envio envio) {
+    public ResponseEntity<Envio> actualizar(@PathVariable Long id, @Valid @RequestBody Envio envio) {
         Envio actualizado = envioService.actualizar(id, envio);
         if (actualizado == null) {
             return ResponseEntity.notFound().build();

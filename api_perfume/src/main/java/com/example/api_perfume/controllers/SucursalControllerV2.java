@@ -4,8 +4,13 @@ import com.example.api_perfume.models.entities.Sucursal;
 import com.example.api_perfume.services.SucursalService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,20 +40,34 @@ public class SucursalControllerV2 {
     }
 
     @PostMapping
-    @Operation(summary = "Crear una nueva sucursal", description = "Permite registrar una nueva sucursal en el sistema")
-    public ResponseEntity<Sucursal> crear(
-            @Parameter(description = "Datos de la nueva sucursal a crear")
-            @RequestBody Sucursal sucursal) {
-        return ResponseEntity.ok(sucursalService.crear(sucursal));
+    @Operation(
+        summary = "Crear una nueva sucursal",
+        description = "Permite registrar una nueva sucursal en el sistema",
+        requestBody = @RequestBody(
+                description = "Datos de la sucursal a crear",
+                required = true,
+                content = @Content(schema = @Schema(implementation = Sucursal.class))
+        )
+    )
+    public ResponseEntity<Sucursal> crear(@Valid @org.springframework.web.bind.annotation.RequestBody Sucursal sucursal) {
+        Sucursal creada = sucursalService.crear(sucursal);
+        return ResponseEntity.status(HttpStatus.CREATED).body(creada);
     }
 
     @PutMapping("/{id}")
-    @Operation(summary = "Actualizar sucursal", description = "Permite modificar los datos de una sucursal existente")
+    @Operation(
+        summary = "Actualizar sucursal",
+        description = "Permite modificar los datos de una sucursal existente",
+        requestBody = @RequestBody(
+                description = "Datos actualizados de la sucursal",
+                required = true,
+                content = @Content(schema = @Schema(implementation = Sucursal.class))
+        )
+    )
     public ResponseEntity<Sucursal> actualizar(
             @Parameter(description = "ID de la sucursal a actualizar", example = "1")
             @PathVariable Long id,
-            @Parameter(description = "Datos actualizados de la sucursal")
-            @RequestBody Sucursal sucursal) {
+            @Valid @org.springframework.web.bind.annotation.RequestBody Sucursal sucursal) {
         Sucursal actualizada = sucursalService.actualizar(id, sucursal);
         return actualizada != null ? ResponseEntity.ok(actualizada) : ResponseEntity.notFound().build();
     }
