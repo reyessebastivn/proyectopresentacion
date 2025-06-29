@@ -31,7 +31,7 @@ public class PerfumeControllerV2 {
     @Autowired
     private PerfumeService perfumeServicev2;
 
-    @GetMapping
+    @GetMapping("/")
     @Operation(summary = "Obtener todos los perfumes", description = "Obtiene una lista HATEOAS de todos los perfumes del inventario")
     public CollectionModel<EntityModel<Perfume>> obtenerTodos() {
         List<EntityModel<Perfume>> perfumes = perfumeServicev2.obtenerTodos()
