@@ -6,6 +6,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Entity
@@ -16,10 +19,15 @@ public class Devolucion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull(message = "El id de venta es obligatorio")
     private Long idVenta;
-    private String motivo;
-    private LocalDateTime fecha;
-    private String estado; 
 
-    
+    @NotBlank(message = "El motivo no puede estar vacío")
+    @Size(max = 255, message = "El motivo no puede superar los 255 caracteres")
+    private String motivo;
+
+    private LocalDateTime fecha;
+
+    @NotBlank(message = "El estado no puede estar vacío")
+    private String estado;
 }

@@ -8,15 +8,17 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/reportes")
-public class ReporteController {
+public class ReporteController 
 
-    @Autowired
+   /*  {@Autowired
     private ReporteService reporteService;
 
     @GetMapping
@@ -63,5 +65,65 @@ public class ReporteController {
             @RequestParam("desde") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate desde,
             @RequestParam("hasta") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate hasta) {
         return reporteService.buscarPorRangoDeFecha(desde, hasta);
+    }
+}*/
+
+{
+
+    @Autowired
+    private WebClient.Builder webClientBuilder;
+
+    // Reporte: Cantidad de clientes por sucursal y rango de fechas
+    @GetMapping("/clientes")
+    public int cantidadClientesPorSucursalYFecha(
+            @RequestParam String fechaInicio,
+            @RequestParam String fechaFin,
+            @RequestParam Long sucursalId) {
+
+        // Llama al microservicio de ventas/pagos/usuarios
+        Integer cantidad = webClientBuilder.build()
+            .get()
+            .uri("http://microservicio01/ventas/cantidad-clientes?sucursalId={sucursalId}&fechaInicio={f1}&fechaFin={f2}",
+                sucursalId, fechaInicio, fechaFin)
+            .retrieve()
+            .bodyToMono(Integer.class)
+            .block();
+
+        return cantidad != null ? cantidad : 0;
+    }
+
+    // Reporte: Perfume más vendido en rango de fechas y por sucursal
+    @GetMapping("/perfume-mas-vendido")
+    public Map<String, Object> perfumeMasVendido(
+            @RequestParam String fechaInicio,
+            @RequestParam String fechaFin,
+            @RequestParam Long sucursalId) {
+
+        // Llama al microservicio de ventas para el cálculo
+        return webClientBuilder.build()
+            .get()
+            .uri("http://microservicio01/ventas/perfume-mas-vendido?sucursalId={sucursalId}&fechaInicio={f1}&fechaFin={f2}",
+                sucursalId, fechaInicio, fechaFin)
+            .retrieve()
+            .bodyToMono(Map.class)
+            .block();
+    }
+
+    // Reporte: Ganancias por sucursal y rango de fechas
+    @GetMapping("/ganancias")
+    public Double gananciasPorSucursal(
+            @RequestParam String fechaInicio,
+            @RequestParam String fechaFin,
+            @RequestParam Long sucursalId) {
+
+        Double ganancias = webClientBuilder.build()
+            .get()
+            .uri("http://microservicio01/ventas/ganancias?sucursalId={sucursalId}&fechaInicio={f1}&fechaFin={f2}",
+                sucursalId, fechaInicio, fechaFin)
+            .retrieve()
+            .bodyToMono(Double.class)
+            .block();
+
+        return ganancias != null ? ganancias : 0.0;
     }
 }

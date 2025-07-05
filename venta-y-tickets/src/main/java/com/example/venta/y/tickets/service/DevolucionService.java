@@ -1,8 +1,7 @@
 package com.example.venta.y.tickets.service;
 
+import java.util.List;
 
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -10,13 +9,14 @@ import org.springframework.web.server.ResponseStatusException;
 import com.example.venta.y.tickets.model.Devolucion;
 import com.example.venta.y.tickets.repository.DevolucionRepository;
 
-import java.util.List;
-
 @Service
 public class DevolucionService {
 
-    @Autowired
-    private DevolucionRepository devolucionRepository;
+    private final DevolucionRepository devolucionRepository;
+
+    public DevolucionService(DevolucionRepository devolucionRepository) {
+        this.devolucionRepository = devolucionRepository;
+    }
 
     public List<Devolucion> obtenerTodas() {
         return devolucionRepository.findAll();

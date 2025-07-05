@@ -3,6 +3,7 @@ package com.example.venta.y.tickets.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.venta.y.tickets.model.Devolucion;
 import com.example.venta.y.tickets.service.DevolucionService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/devoluciones")
 public class DevolucionController {
@@ -22,27 +25,28 @@ public class DevolucionController {
     private DevolucionService devolucionService;
 
     @GetMapping
-    public List<Devolucion> listar() {
-        return devolucionService.obtenerTodas();
+    public ResponseEntity<List<Devolucion>> listar() {
+        return ResponseEntity.ok(devolucionService.obtenerTodas());
     }
 
     @GetMapping("/{id}")
-    public Devolucion buscarPorId(@PathVariable Long id) {
-        return devolucionService.obtenerPorId(id);
+    public ResponseEntity<Devolucion> buscarPorId(@PathVariable Long id) {
+        return ResponseEntity.ok(devolucionService.obtenerPorId(id));
     }
 
     @GetMapping("/venta/{idVenta}")
-    public List<Devolucion> buscarPorIdVenta(@PathVariable Long idVenta) {
-        return devolucionService.obtenerPorIdVenta(idVenta);
+    public ResponseEntity<List<Devolucion>> buscarPorIdVenta(@PathVariable Long idVenta) {
+        return ResponseEntity.ok(devolucionService.obtenerPorIdVenta(idVenta));
     }
 
     @PostMapping
-    public Devolucion crear(@RequestBody Devolucion devolucion) {
-        return devolucionService.guardar(devolucion);
+    public ResponseEntity<Devolucion> crear(@Valid @RequestBody Devolucion devolucion) {
+        return ResponseEntity.ok(devolucionService.guardar(devolucion));
     }
 
     @DeleteMapping("/{id}")
-    public void eliminar(@PathVariable Long id) {
+    public ResponseEntity<String> eliminar(@PathVariable Long id) {
         devolucionService.eliminar(id);
+        return ResponseEntity.ok("Devolución eliminada correctamente");
     }
 }

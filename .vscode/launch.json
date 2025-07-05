@@ -8,7 +8,8 @@
             "mainClass": "com.example.api_perfume.ApiPerfumeApplication",
             "projectName": "api_perfume",
             "args": "",
-            "envFile": "${workspaceFolder}/.env"
+            "envFile": "${workspaceFolder}/.env",
+            "vmArgs": " -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=52280 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dspring.jmx.enabled=true -Djava.rmi.server.hostname=localhost -Dspring.application.admin.enabled=true -Dspring.boot.project.name=api_perfume"
         },
         {
             "type": "java",
@@ -27,6 +28,17 @@
             "cwd": "${workspaceFolder}",
             "mainClass": "com.example.MicroServicio01Application",
             "projectName": "MicroServicio01",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env",
+            "vmArgs": " -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=52809 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dspring.jmx.enabled=true -Djava.rmi.server.hostname=localhost -Dspring.application.admin.enabled=true -Dspring.boot.project.name=MicroServicio01"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-VentaYTicketsApplication<venta-y-tickets>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.example.venta.y.tickets.VentaYTicketsApplication",
+            "projectName": "venta-y-tickets",
             "args": "",
             "envFile": "${workspaceFolder}/.env"
         }

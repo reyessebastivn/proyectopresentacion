@@ -3,7 +3,11 @@ package com.example.venta.y.tickets.model;
 import java.sql.Date;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
 @Data
@@ -16,17 +20,19 @@ public class Cupon {
     private long idCupon;
 
     @Column(name = "codigo", nullable = false, unique = true)
-    @NotBlank
+    @NotBlank(message = "El código no puede estar vacío")
+    @Size(max = 50, message = "El código no debe superar los 50 caracteres")
     private String codigo;
 
     @Column(name = "descuento", nullable = false)
+    @Min(0)/*Descuento en porcentaje */
+    @Max(100)
     private double descuento;
 
     @Column(name = "activo", nullable = false)
     private boolean activo;
 
     @Column(name = "fecha_expiracion")
+    @FutureOrPresent(message = "La fecha de expiración debe ser futura o actual")
     private Date fechaExpiracion;
-
-
 }

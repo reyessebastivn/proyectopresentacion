@@ -2,10 +2,13 @@ package com.example.venta.y.tickets.controller;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.venta.y.tickets.model.Reclamo;
 import com.example.venta.y.tickets.service.ReclamoService;
+
+import jakarta.validation.Valid;
 
 import java.util.List;
 
@@ -17,32 +20,33 @@ public class ReclamoController {
     private ReclamoService reclamoService;
 
     @GetMapping
-    public List<Reclamo> listar() {
-        return reclamoService.obtenerTodos();
+    public ResponseEntity<List<Reclamo>> listar() {
+        return ResponseEntity.ok(reclamoService.obtenerTodos());
     }
 
     @GetMapping("/{id}")
-    public Reclamo buscarPorId(@PathVariable Long id) {
-        return reclamoService.obtenerPorId(id);
+    public ResponseEntity<Reclamo> buscarPorId(@PathVariable Long id) {
+        return ResponseEntity.ok(reclamoService.obtenerPorId(id));
     }
 
     @GetMapping("/cliente/{clienteNombre}")
-    public List<Reclamo> buscarPorCliente(@PathVariable String clienteNombre) {
-        return reclamoService.obtenerPorClienteNombre(clienteNombre);
+    public ResponseEntity<List<Reclamo>> buscarPorCliente(@PathVariable String clienteNombre) {
+        return ResponseEntity.ok(reclamoService.obtenerPorClienteNombre(clienteNombre));
     }
 
     @GetMapping("/estado/{estado}")
-    public List<Reclamo> buscarPorEstado(@PathVariable String estado) {
-        return reclamoService.obtenerPorEstado(estado);
+    public ResponseEntity<List<Reclamo>> buscarPorEstado(@PathVariable String estado) {
+        return ResponseEntity.ok(reclamoService.obtenerPorEstado(estado));
     }
 
     @PostMapping
-    public Reclamo crear(@RequestBody Reclamo reclamo) {
-        return reclamoService.guardar(reclamo);
+    public ResponseEntity<Reclamo> crear(@Valid @RequestBody Reclamo reclamo) {
+        return ResponseEntity.ok(reclamoService.guardar(reclamo));
     }
 
     @DeleteMapping("/{id}")
-    public void eliminar(@PathVariable Long id) {
+    public ResponseEntity<String> eliminar(@PathVariable Long id) {
         reclamoService.eliminar(id);
+        return ResponseEntity.ok("Reclamo eliminado correctamente");
     }
 }
