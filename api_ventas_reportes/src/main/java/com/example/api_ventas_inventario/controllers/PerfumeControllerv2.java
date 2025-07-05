@@ -64,8 +64,8 @@ public class PerfumeControllerv2 {
    
 
 
-   @Operation(summary = "Elima usuario",
-   description = "Eliminar a un usuario en especifico por su ID")
+   @Operation(summary = "Elimina perfume",
+   description = "Eliminar perfume en especifico por su ID")
     @DeleteMapping("/{id}")
     public void deletePerfume(@PathVariable Long id) {
         perfumeServicev2.deleteById(id);
