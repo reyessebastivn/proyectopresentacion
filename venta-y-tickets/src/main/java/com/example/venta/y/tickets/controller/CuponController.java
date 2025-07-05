@@ -43,7 +43,7 @@ public class CuponController {
     @Operation(summary = "Eliminar cupon", 
             description = "Elimina un cupón por ID.")
     public String eliminarCupon(@PathVariable String codigo) {
-        cuponService.eliminarCuponPorCodigo(codigo);   
+        cuponService.eliminarCuponPorId(codigo);   
         return "Eliminado!";
     }
 

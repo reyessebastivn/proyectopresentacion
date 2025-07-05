@@ -8,7 +8,7 @@ import com.example.venta.y.tickets.model.Cupon;
 @Repository
 public interface CuponRepository extends JpaRepository<Cupon, Long> {
 
-   Cupon findByCodigo(String codigo);
+   Cupon findById(String codigo);
 
    
 }

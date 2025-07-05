@@ -133,8 +133,14 @@
     	<scope>test</scope>
 	</dependency>
 
+	<dependency>
+      <groupId>com.github.transbankdevelopers</groupId>
+      <artifactId>transbank-sdk-java</artifactId>
+      <version>6.0.0</version>
+    </dependency>
 
-  </dependencies>
+	  
+    </dependencies>
 
 	<build>
 		<plugins>

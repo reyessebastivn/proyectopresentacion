@@ -23,10 +23,10 @@ public class CuponServiceTest {
 
     @BeforeEach
     public void setUp() {
-        Cupon existente = cuponService.obtenerPorCodigo("TEST10");
+        Cupon existente = cuponService.obtenerCuponId("Prueba01");
         if (existente == null) {
             Cupon request = new Cupon();
-            request.setCodigo("TEST10");
+            request.setCodigo("Prueba01");
             request.setDescuento(10.0);
             request.setFechaExpiracion(Date.valueOf("2025-12-31"));
             cuponService.registrarCupon(request);
@@ -35,15 +35,15 @@ public class CuponServiceTest {
 
     @Test
     public void testBuscarPorCodigo_CuandoExiste_DeberiaRetornarCupon() {
-        Cupon resultado = cuponService.obtenerPorCodigo("TEST10");
+        Cupon resultado = cuponService.obtenerCuponId("Prueba01");
         assertNotNull(resultado);
-        assertEquals("TEST10", resultado.getCodigo());
+        assertEquals("Prueba01", resultado.getCodigo());
         assertEquals(10.0, resultado.getDescuento());
     }
 
     @Test
     public void testBuscarPorCodigo_CuandoNoExiste_DeberiaRetornarNull() {
-        Cupon resultado = cuponService.obtenerPorCodigo("INEXISTENTE");
+        Cupon resultado = cuponService.obtenerCuponId("SIN_CUPON");
         assertNull(resultado);
     }
 }
