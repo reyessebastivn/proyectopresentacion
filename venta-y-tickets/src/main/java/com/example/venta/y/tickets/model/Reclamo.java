@@ -2,6 +2,8 @@ package com.example.venta.y.tickets.model;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,18 +19,19 @@ public class Reclamo {
   
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
 
     @NotBlank(message = "El nombre del cliente es obligatorio")
-    @Size(max = 100, message = "El nombre del cliente no puede superar los 100 caracteres")
+    @Size(max = 50, message = "El nombre del cliente no puede superar los 50 caracteres")
     private String clienteNombre;
 
     @NotBlank(message = "La descripción no puede estar vacía")
-    @Size(max = 500, message = "La descripción no puede superar los 500 caracteres")
+    @Size(max = 250, message = "La descripción no puede superar los 250 caracteres")
     private String descripcion;
 
     @NotBlank(message = "El estado es obligatorio")
-    @Size(max = 50, message = "El estado no puede superar los 50 caracteres")
+    @Size(max = 20, message = "El estado no puede superar los 20 caracteres")
     private String estado;
 
     private LocalDateTime fecha;

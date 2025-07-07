@@ -2,6 +2,8 @@ package com.example.venta.y.tickets.model;
 
 import java.sql.Date;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.Max;
@@ -17,6 +19,7 @@ public class Cupon {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private long idCupon;
 
     @Column(name = "codigo", nullable = false, unique = true)

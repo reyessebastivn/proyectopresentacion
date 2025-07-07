@@ -1,49 +1,90 @@
 package com.example.venta.y.tickets;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 
-import java.sql.Date;
+import com.example.venta.y.tickets.model.Cupon;
+import com.example.venta.y.tickets.repository.CuponRepository;
+import com.example.venta.y.tickets.service.CuponService;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.mockito.Mockito;
+import org.springframework.web.server.ResponseStatusException;
 
-import com.example.venta.y.tickets.model.Cupon;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.util.Collections;
+import java.util.List;
 
-import com.example.venta.y.tickets.service.CuponService;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
-@SpringBootTest
-public class CuponServiceTest {
+class CuponServiceTest {
 
-    @Autowired
+    private CuponRepository cuponRepository;
     private CuponService cuponService;
 
     @BeforeEach
-    public void setUp() {
-        Cupon existente = cuponService.obtenerCuponId("Prueba01");
-        if (existente == null) {
-            Cupon request = new Cupon();
-            request.setCodigo("Prueba01");
-            request.setDescuento(10.0);
-            request.setFechaExpiracion(Date.valueOf("2025-12-31"));
-            cuponService.registrarCupon(request);
-        }
+    void setUp() {
+        cuponRepository = mock(CuponRepository.class);
+        cuponService = new CuponService(cuponRepository);
     }
 
     @Test
-    public void testBuscarPorCodigo_CuandoExiste_DeberiaRetornarCupon() {
-        Cupon resultado = cuponService.obtenerCuponId("Prueba01");
+    void registrarCupon_deberiaGuardarNuevoCupon() {
+        Cupon cupon = new Cupon();
+        cupon.setCodigo("TEST123");
+        cupon.setDescuento(20);
+        cupon.setActivo(true);
+
+        when(cuponRepository.findByCodigo("TEST123")).thenReturn(null);
+        when(cuponRepository.save(cupon)).thenReturn(cupon);
+
+        Cupon resultado = cuponService.registrarCupon(cupon);
+
         assertNotNull(resultado);
-        assertEquals("Prueba01", resultado.getCodigo());
-        assertEquals(10.0, resultado.getDescuento());
+        assertTrue(resultado.isActivo());
+        verify(cuponRepository).save(cupon);
     }
 
     @Test
-    public void testBuscarPorCodigo_CuandoNoExiste_DeberiaRetornarNull() {
-        Cupon resultado = cuponService.obtenerCuponId("SIN_CUPON");
-        assertNull(resultado);
+    void registrarCupon_deberiaLanzarExcepcionSiExiste() {
+        Cupon cupon = new Cupon();
+        cupon.setCodigo("DUPLICADO");
+
+        when(cuponRepository.findByCodigo("DUPLICADO")).thenReturn(new Cupon());
+
+        assertThrows(ResponseStatusException.class, () -> cuponService.registrarCupon(cupon));
+    }
+
+    @Test
+    void validarCupon_deberiaLanzarSiCaducado() {
+        Cupon cupon = new Cupon();
+        cupon.setCodigo("EXPIRO");
+        cupon.setActivo(true);
+        cupon.setFechaExpiracion(Date.valueOf(LocalDate.now().minusDays(1)));
+
+        when(cuponRepository.findByCodigo("EXPIRO")).thenReturn(cupon);
+
+        ResponseStatusException ex = assertThrows(ResponseStatusException.class, () -> cuponService.validarCupon("EXPIRO"));
+        assertEquals("Cupón caducado", ex.getReason());
+    }
+
+    @Test
+    void obtenerTodosLosCupones_deberiaDevolverLista() {
+        when(cuponRepository.findAll()).thenReturn(Collections.singletonList(new Cupon()));
+        List<Cupon> lista = cuponService.obtenerTodosLosCupones();
+        assertFalse(lista.isEmpty());
+    }
+
+    @Test
+    void eliminarCuponPorId_deberiaEliminar() {
+        Cupon cupon = new Cupon();
+        cupon.setCodigo("ELIMINAR");
+
+        when(cuponRepository.findByCodigo("ELIMINAR")).thenReturn(cupon);
+
+        cuponService.eliminarCuponPorId("ELIMINAR");
+
+        verify(cuponRepository).delete(cupon);
     }
 }

@@ -20,7 +20,7 @@ public class CuponService {
     }
 
     public Cupon registrarCupon(Cupon cupon) {
-        if (cuponRepository.findById(cupon.getCodigo()) != null) {
+        if (cuponRepository.findByCodigo(cupon.getCodigo()) != null) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "El cupón ingresado ya está en uso");
         }
         cupon.setActivo(true);
@@ -28,7 +28,7 @@ public class CuponService {
     }
 
     public Cupon obtenerCuponId(String codigo) {
-        Cupon cupon = cuponRepository.findById(codigo);
+        Cupon cupon = cuponRepository.findByCodigo(codigo);
         if (cupon == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "El cupón no existe");
         }
@@ -40,7 +40,7 @@ public class CuponService {
     }
 
     public void eliminarCuponPorId(String codigo) {
-        Cupon cupon = cuponRepository.findById(codigo);
+        Cupon cupon = cuponRepository.findByCodigo(codigo);
         if (cupon == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Cupón no reconocido");
         }
@@ -48,7 +48,7 @@ public class CuponService {
     }
 
     public Cupon validarCupon(String codigo) {
-        Cupon cupon = cuponRepository.findById(codigo);
+        Cupon cupon = cuponRepository.findByCodigo(codigo);
         if (cupon == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Cupón inexistente");
         }

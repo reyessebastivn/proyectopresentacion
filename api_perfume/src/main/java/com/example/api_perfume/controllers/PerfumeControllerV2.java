@@ -75,4 +75,33 @@ public class PerfumeControllerV2 {
         perfumeServicev2.eliminar(id);
         return ResponseEntity.noContent().build();
     }
+
+
+    
+    @PutMapping("/descontarStock/{id}/{cantidad}")
+    @Operation(summary = "Descontar stock de un perfume", 
+               description = "Descuenta la cantidad especificada del stock de un perfume dado su ID.")
+    public ResponseEntity<Perfume> descontarStock(
+            @Parameter(description = "ID del perfume", example = "1", required = true)
+            @PathVariable(required = true) Long id,
+
+            @Parameter(description = "Cantidad a descontar", example = "2", required = true)
+            @PathVariable(required = true) Integer cantidad) {
+        
+        Perfume perfume = perfumeServicev2.obtenerUno(id);
+        if (perfume == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        if (perfume.getStock() < cantidad) {
+            return ResponseEntity.badRequest().body(perfume);
+        }
+
+        perfume.setStock(perfume.getStock() - cantidad);
+        perfumeServicev2.save(perfume);
+
+        return ResponseEntity.ok(perfume);
+    }
+
+
 }

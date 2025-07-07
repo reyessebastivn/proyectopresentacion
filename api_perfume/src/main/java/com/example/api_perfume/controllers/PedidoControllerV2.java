@@ -96,4 +96,6 @@ public class PedidoControllerV2 {
             @PathVariable String estado) {
         return pedidoService.buscarPorEstado(estado);
     }
+
+    
 }

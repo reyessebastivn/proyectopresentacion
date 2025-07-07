@@ -38,7 +38,8 @@ public class CuponControllerV2 {
     }
 
     @GetMapping("/validar/{codigo}")
-    @Operation(summary = "Validar cupón", description = "Verifica si un cupón es válido y está activo")
+    @Operation(summary = "Validar cupón", 
+               description = "Verifica si un cupón es válido y está activo")
     public ResponseEntity<Cupon> validarCupon(
             @Parameter(description = "Código del cupón", example = "ABC123")
             @PathVariable String codigo) {
@@ -47,7 +48,8 @@ public class CuponControllerV2 {
     }
 
     @DeleteMapping("/{codigo}")
-    @Operation(summary = "Eliminar cupón", description = "Elimina un cupón por su código")
+    @Operation(summary = "Eliminar cupón", 
+               description = "Elimina un cupón por su código")
     public ResponseEntity<Void> eliminarCupon(
             @Parameter(description = "Código del cupón", example = "ABC123")
             @PathVariable String codigo) {

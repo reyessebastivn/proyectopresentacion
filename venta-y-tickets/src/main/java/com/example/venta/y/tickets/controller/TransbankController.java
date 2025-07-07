@@ -1,23 +1,5 @@
 package com.example.venta.y.tickets.controller;
 
-
-
-
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.server.ResponseStatusException;
-
-import com.example.venta.y.tickets.model.Cupon;
-import com.example.venta.y.tickets.model.Pago;
-import com.example.venta.y.tickets.model.response.ConfirmarResponse;
-import com.example.venta.y.tickets.model.response.InicioPagoResponse;
-import com.example.venta.y.tickets.service.CuponService;
-import com.example.venta.y.tickets.service.PagoService;
-
 import cl.transbank.common.IntegrationType;
 import cl.transbank.webpay.common.WebpayOptions;
 import cl.transbank.webpay.exception.TransactionCommitException;
@@ -25,6 +7,18 @@ import cl.transbank.webpay.exception.TransactionCreateException;
 import cl.transbank.webpay.webpayplus.WebpayPlus;
 import cl.transbank.webpay.webpayplus.responses.WebpayPlusTransactionCommitResponse;
 import cl.transbank.webpay.webpayplus.responses.WebpayPlusTransactionCreateResponse;
+import com.example.venta.y.tickets.model.Cupon;
+import com.example.venta.y.tickets.model.Pago;
+import com.example.venta.y.tickets.model.response.ConfirmarResponse;
+import com.example.venta.y.tickets.model.response.InicioPagoResponse;
+import com.example.venta.y.tickets.service.CuponService;
+import com.example.venta.y.tickets.service.PagoService;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -35,24 +29,24 @@ import java.util.UUID;
 @RequestMapping("/transbank")
 public class TransbankController {
 
-    @Autowired
-    private WebClient webClient;
-
-    @Autowired
-    private PagoService pagoService;
-
-    @Autowired
-    private CuponService cuponService;
-
+    private final WebClient webClient;
+    private final PagoService pagoService;
+    private final CuponService cuponService;
     private final WebpayPlus.Transaction transaction;
 
-    // Mapa temporal para asociar datos a cada sessionId
+    // Mapas temporales para asociar sessionId con datos
     private final Map<String, Long> userMap = new HashMap<>();
     private final Map<String, Long> perfumeMap = new HashMap<>();
     private final Map<String, Integer> precioMap = new HashMap<>();
     private final Map<String, String> cuponMap = new HashMap<>();
 
-    public TransbankController() {
+    public TransbankController(@Qualifier("webClientUsuarios") WebClient webClient,
+                               PagoService pagoService,
+                               CuponService cuponService) {
+        this.webClient = webClient;
+        this.pagoService = pagoService;
+        this.cuponService = cuponService;
+
         WebpayOptions options = new WebpayOptions(
             "597055555532",
             "579B532A7440BB0C9079DED94D31EA1615BACEB56610332264630D42D0A36B1C",

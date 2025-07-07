@@ -1,6 +1,9 @@
 package com.example.venta.y.tickets.model;
 
 import java.time.LocalDate;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -12,8 +15,9 @@ import lombok.Data;
 @Entity
 @Table(name = "pago")
 public class Pago {
-   @Id
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @Column(name = "id_pago")
     private Long idPago;
 
