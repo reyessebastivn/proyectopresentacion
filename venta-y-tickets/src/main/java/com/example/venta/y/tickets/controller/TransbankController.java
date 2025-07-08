@@ -13,6 +13,10 @@ import com.example.venta.y.tickets.model.response.ConfirmarResponse;
 import com.example.venta.y.tickets.model.response.InicioPagoResponse;
 import com.example.venta.y.tickets.service.CuponService;
 import com.example.venta.y.tickets.service.PagoService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +31,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/transbank")
+@Tag(name = "Transbank", description = "API de transacciones")
 public class TransbankController {
 
     private final WebClient webClient;
@@ -55,6 +60,8 @@ public class TransbankController {
     }
 
     @PostMapping("/crear")
+    @Operation(summary = "Crear transacción de pago",
+               description = "Inicia una transacción en Transbank con la validación de usuario, perfume y aplicación de cupones de descuento.")
     public ResponseEntity<InicioPagoResponse> iniciarPago(@RequestBody Pago request) {
         InicioPagoResponse response = new InicioPagoResponse();
 
@@ -86,7 +93,7 @@ public class TransbankController {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cantidad inválida");
             }
 
-            // Calcular precio final con regla de cupón
+            // Calcular precio final con regla de cupones
             double precioFinal;
             String codigoCupon = request.getCodigoCupon();
 
@@ -98,9 +105,9 @@ public class TransbankController {
 
             } else if ("DSC10".equalsIgnoreCase(codigoCupon) && request.getCantidad() >= 3) {
                 precioFinal = request.getPrecio() * request.getCantidad() * 0.9;
-                
+
             } else {
-            precioFinal = request.getPrecio() * request.getCantidad();
+                precioFinal = request.getPrecio() * request.getCantidad();
             }
 
             int precio = (int) Math.round(precioFinal);
@@ -143,7 +150,11 @@ public class TransbankController {
     }
 
     @GetMapping("/confirmar")
-    public ResponseEntity<ConfirmarResponse> confirmarPago(@RequestParam("token_ws") String tokenWs) {
+    @Operation(summary = "Confirmar transacción de pago",
+               description = "Confirma el pago realizado en Transbank, guarda la información de la transacción y devuelve el resultado final al usuario.")
+    public ResponseEntity<ConfirmarResponse> confirmarPago(
+            @Parameter(description = "Token de confirmación devuelto por Transbank", required = true)
+            @RequestParam("token_ws") String tokenWs) {
         ConfirmarResponse response = new ConfirmarResponse();
         try {
             WebpayPlusTransactionCommitResponse commitResponse = transaction.commit(tokenWs);
