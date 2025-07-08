@@ -15,6 +15,7 @@ import lombok.Data;
 @Entity
 @Table(name = "pago")
 public class Pago {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
@@ -45,4 +46,9 @@ public class Pago {
     @Size(max = 100, message = "El id de Transbank no puede superar los 100 caracteres")
     @Column(name = "id_transaccion_transbank", length = 100)
     private String idTransBank;
+
+    @NotNull(message = "La cantidad es obligatoria")
+    @Min(value = 1, message = "La cantidad mínima es 1")
+    @Column(name = "cantidad", nullable = false)
+    private Integer cantidad;
 }

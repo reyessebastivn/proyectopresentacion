@@ -34,7 +34,6 @@ public class TransbankController {
     private final CuponService cuponService;
     private final WebpayPlus.Transaction transaction;
 
-    // Mapas temporales para asociar sessionId con datos
     private final Map<String, Long> userMap = new HashMap<>();
     private final Map<String, Long> perfumeMap = new HashMap<>();
     private final Map<String, Integer> precioMap = new HashMap<>();
@@ -82,13 +81,26 @@ public class TransbankController {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Perfume no existe");
             }
 
-            // Calcular precio final
-            double precioFinal = request.getPrecio();
+            // Validar cantidad
+            if (request.getCantidad() == null || request.getCantidad() <= 0) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cantidad inválida");
+            }
+
+            // Calcular precio final con regla de cupón
+            double precioFinal;
             String codigoCupon = request.getCodigoCupon();
 
-            if (codigoCupon != null && !codigoCupon.isEmpty()) {
-                Cupon cupon = cuponService.validarCupon(codigoCupon);
-                precioFinal *= (1 - cupon.getDescuento() / 100.0);
+            if ("DESC30".equalsIgnoreCase(codigoCupon) && request.getCantidad() >= 15) {
+                precioFinal = request.getPrecio() * request.getCantidad() * 0.7;
+
+            } else if ("DESC20".equalsIgnoreCase(codigoCupon) && request.getCantidad() >= 7) {
+                precioFinal = request.getPrecio() * request.getCantidad() * 0.8;
+
+            } else if ("DSC10".equalsIgnoreCase(codigoCupon) && request.getCantidad() >= 3) {
+                precioFinal = request.getPrecio() * request.getCantidad() * 0.9;
+                
+            } else {
+            precioFinal = request.getPrecio() * request.getCantidad();
             }
 
             int precio = (int) Math.round(precioFinal);
@@ -144,7 +156,7 @@ public class TransbankController {
 
             pagoService.guardarPago(userId, perfumeId, precio, LocalDate.now(), codigoCupon, commitResponse.getBuyOrder());
 
-            // Limpiar mapas temporales
+            // Limpiar mapas
             userMap.remove(sessionId);
             perfumeMap.remove(sessionId);
             precioMap.remove(sessionId);

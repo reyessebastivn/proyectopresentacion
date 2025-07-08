@@ -14,6 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/v2/cupones")
 @Tag(name = "Cupón API v2", description = "API versión 2 para la gestión de cupones")
@@ -41,7 +43,7 @@ public class CuponControllerV2 {
     @Operation(summary = "Validar cupón", 
                description = "Verifica si un cupón es válido y está activo")
     public ResponseEntity<Cupon> validarCupon(
-            @Parameter(description = "Código del cupón", example = "ABC123")
+            @Parameter(description = "Código del cupón", example = "ABC123", required = true)
             @PathVariable String codigo) {
         Cupon cupon = cuponService.validarCupon(codigo);
         return ResponseEntity.ok(cupon);
@@ -51,9 +53,26 @@ public class CuponControllerV2 {
     @Operation(summary = "Eliminar cupón", 
                description = "Elimina un cupón por su código")
     public ResponseEntity<Void> eliminarCupon(
-            @Parameter(description = "Código del cupón", example = "ABC123")
+            @Parameter(description = "Código del cupón", example = "ABC123", required = true)
             @PathVariable String codigo) {
         cuponService.eliminarCuponPorId(codigo);
         return ResponseEntity.noContent().build();
+    }
+
+    @Operation(summary = "Listar todos los cupones", 
+               description = "Obtiene una lista de todos los cupones registrados en el sistema.")
+    @GetMapping
+    public List<Cupon> listar() {
+        return cuponService.obtenerTodosLosCupones();
+    }
+
+    @Operation(summary = "Obtener un cupón por código", 
+               description = "Devuelve la información de un cupón específico dado su código.")
+    @GetMapping("/{codigo}")
+    public ResponseEntity<Cupon> obtener(
+            @Parameter(description = "Código del cupón", example = "ABC123", required = true)
+            @PathVariable String codigo) {
+        Cupon cupon = cuponService.obtenerCuponId(codigo);
+        return ResponseEntity.ok(cupon);
     }
 }
