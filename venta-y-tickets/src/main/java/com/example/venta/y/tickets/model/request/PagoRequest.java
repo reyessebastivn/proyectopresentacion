@@ -4,8 +4,7 @@ import lombok.Data;
 
 @Data
 public class PagoRequest {
-    private Long idUsuario;
-    private Long idPerfume;
-    private int precio;
+    private Long nombreUsuario;
+    private Long nombrePerfume;
     private String codigoCupon;
 }

@@ -3,6 +3,7 @@ package com.example.venta.y.tickets.model;
 import java.time.LocalDate;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -17,14 +18,15 @@ import lombok.Data;
 public class Compra {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @JsonProperty(access = Access.READ_ONLY)
     private Long id;
 
     private Long usuarioId;
     private Long perfumeId;
     private Integer cantidad;
-    private Double total;
-    private LocalDate fecha = LocalDate.now();
 
-   
+    @JsonProperty(access = Access.READ_ONLY) 
+    private Double total;
+
+    private LocalDate fecha = LocalDate.now();
 }

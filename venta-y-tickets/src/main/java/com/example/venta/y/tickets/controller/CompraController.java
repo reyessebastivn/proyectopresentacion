@@ -15,7 +15,8 @@ import com.example.venta.y.tickets.model.response.CompraResponse;
 import com.example.venta.y.tickets.service.CompraService;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import org.springframework.web.bind.annotation.RequestBody;
+
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
