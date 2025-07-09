@@ -10,7 +10,10 @@ import org.springframework.web.bind.annotation.*;
 
 import com.example.assemblers.RolModelAssembler;
 import com.example.models.entities.Rol;
+import com.example.models.entities.User;
+import com.example.models.requests.RolAsignacionRequest;
 import com.example.services.RolService;
+import com.example.services.UserService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -18,17 +21,22 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/rol/v2")
-@Tag(name = "Roles v2", description = "Controlador de Roles versión 2 con Swagger y HATEOAS")
+@Tag(name = "Roles v2", 
+    description = "Controlador de Roles versión 2 con Swagger y HATEOAS")
 public class RolControllerv2 {
 
     @Autowired
     private RolService rolService;
 
     @Autowired
+    private UserService userService;  // Asegúrate de inyectar UserService aquí
+
+    @Autowired
     private RolModelAssembler assembler;
 
     @GetMapping
-    @Operation(summary = "Listar todos los roles", description = "Obtiene todos los roles con HATEOAS")
+    @Operation(summary = "Listar todos los roles", 
+               description = "Obtiene todos los roles con HATEOAS")
     public CollectionModel<EntityModel<Rol>> obtenerTodos() {
         List<EntityModel<Rol>> roles = rolService.listar()
                 .stream()
@@ -39,7 +47,8 @@ public class RolControllerv2 {
     }
 
     @GetMapping("/{id}")
-    @Operation(summary = "Obtener rol por ID", description = "Devuelve un rol específico con HATEOAS")
+    @Operation(summary = "Obtener rol por ID", 
+               description = "Devuelve un rol específico con HATEOAS")
     public EntityModel<Rol> obtenerPorId(@PathVariable Long id) {
         Rol rol = rolService.buscarPorId(id)
                 .orElseThrow(() -> new RuntimeException("Rol no encontrado"));
@@ -48,15 +57,25 @@ public class RolControllerv2 {
     }
 
     @PostMapping
-    @Operation(summary = "Guardar nuevo rol", description = "Guarda un nuevo rol y devuelve el recurso HATEOAS")
+    @Operation(summary = "Guardar nuevo rol", 
+               description = "Guarda un nuevo rol y devuelve el recurso HATEOAS")
     public EntityModel<Rol> guardar(@Valid @RequestBody Rol rol) {
         Rol nuevo = rolService.guardar(rol);
         return assembler.toModel(nuevo);
     }
 
     @DeleteMapping("/{id}")
-    @Operation(summary = "Eliminar rol", description = "Elimina un rol por su ID")
+    @Operation(summary = "Eliminar rol", 
+               description = "Elimina un rol por su ID")
     public void eliminar(@PathVariable Long id) {
         rolService.eliminarPorId(id);
+    }
+
+    @PostMapping("/asignar-rol")
+    @Operation(summary = "Asignar rol a usuario", 
+               description = "Asigna un rol a un usuario por sus IDs")
+    public EntityModel<User> asignarRol(@RequestBody RolAsignacionRequest request) {
+        User usuarioActualizado = userService.asignarRol(request.getUserId(), request.getRolId());
+        return EntityModel.of(usuarioActualizado);
     }
 }

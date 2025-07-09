@@ -11,9 +11,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.example.models.entities.Rol;
 import com.example.models.entities.User;
+import com.example.models.requests.LoginRequest;
 import com.example.models.requests.UserCreate;
 import com.example.models.requests.UserUpdate;
+import com.example.repositories.RolRepository;
 import com.example.repositories.UserRepository;
 
 @Service
@@ -39,13 +42,19 @@ public class UserService {
         }
 
         try {
+            // Buscar el rol COMPRADOR
+            Rol rolComprador = rolRepository.findByNombre("USUARIO_CLIENTE")
+                    .orElseThrow(
+                            () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Rol USUARIO_CLIENTE encontrado"));
+
             User nuevoUsuario = new User();
-            nuevoUsuario.setFechaCreacion(LocalDateTime.now()); // Ahora usando LocalDateTime
+            nuevoUsuario.setFechaCreacion(LocalDateTime.now());
             nuevoUsuario.setActivo(true);
             nuevoUsuario.setNombre(usuario.getNombre());
             nuevoUsuario.setEmail(usuario.getEmail());
             nuevoUsuario.setPassword(hashearPassword(usuario.getPassword()));
             nuevoUsuario.setTelefono(usuario.getTelefono());
+            nuevoUsuario.setRol(rolComprador); // Asignar el rol automáticamente
 
             return userRepository.save(nuevoUsuario);
 
@@ -82,4 +91,30 @@ public class UserService {
     public String hashearPassword(String password) {
         return encoder.encode(password);
     }
+
+    public User login(LoginRequest loginRequest) {
+        User user = userRepository.findByEmail(loginRequest.getEmail())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Credenciales inválidas"));
+
+        if (!encoder.matches(loginRequest.getPassword(), user.getPassword())) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Credenciales inválidas");
+        }
+
+        return user;
+    }
+
+    @Autowired
+    private RolRepository rolRepository;
+
+    public User asignarRol(int userId, long rolId) {
+        User usuario = userRepository.findById(userId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado"));
+
+        Rol rol = rolRepository.findById(rolId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Rol no encontrado"));
+
+        usuario.setRol(rol);
+        return userRepository.save(usuario);
+    }
+
 }

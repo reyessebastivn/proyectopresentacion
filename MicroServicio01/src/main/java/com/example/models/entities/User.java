@@ -32,16 +32,7 @@ public class User {
 
     private Boolean activo;
 
-    // Relación opcional a Rol (descomenta si tienes la clase Rol):
-    /*
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-        name = "usuario_rol",
-        joinColumns = @JoinColumn(name = "id_usuario"),
-        inverseJoinColumns = @JoinColumn(name = "id_rol")
-    )
-    private Set<Rol> roles;
-    */
+    
 @ManyToOne
 @JoinColumn(name = "id_rol")
 private Rol rol;

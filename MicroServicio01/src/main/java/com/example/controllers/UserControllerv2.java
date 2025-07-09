@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.example.assemblers.UserModelAssembler;
 import com.example.models.entities.User;
+import com.example.models.requests.LoginRequest;
 import com.example.models.requests.UserCreate;
 import com.example.models.requests.UserUpdate;
 import com.example.services.UserService;
@@ -66,4 +67,12 @@ public class UserControllerv2 {
     public void eliminar(@PathVariable int id) {
         userService.eliminar(id);
     }
+
+    @PostMapping("/login")
+    @Operation(summary = "Login de usuario", description = "Permite iniciar sesión con email y contraseña")
+    public User login(@RequestBody LoginRequest loginRequest) {
+        return userService.login(loginRequest);
+    }
+
+    
 }
