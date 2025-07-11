@@ -7,23 +7,31 @@ import static org.mockito.Mockito.*;
 import java.util.Arrays;
 import java.util.Optional;
 
+import com.example.models.entities.Rol;
 import com.example.models.entities.User;
 import com.example.models.requests.UserCreate;
 import com.example.models.requests.UserUpdate;
+import com.example.repositories.RolRepository;
 import com.example.repositories.UserRepository;
 import com.example.services.UserService;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.server.ResponseStatusException;
 
+@ExtendWith(MockitoExtension.class)
 public class UserServiceTest {
 
     @Mock
     private UserRepository userRepository;
+
+    @Mock
+    private RolRepository rolRepository;
 
     @InjectMocks
     private UserService userService;
@@ -70,10 +78,18 @@ public class UserServiceTest {
         userCreate.setPassword("123456");
         userCreate.setTelefono("123456789");
 
+        // Mock Rol
+        Rol rolMock = new Rol();
+        rolMock.setId(1L);
+        rolMock.setNombre("USUARIO_CLIENTE");
+        when(rolRepository.findByNombre("USUARIO_CLIENTE")).thenReturn(Optional.of(rolMock));
+
+        // Mock email no existente
+        when(userRepository.existsByEmail(userCreate.getEmail())).thenReturn(false);
+
+        // Mock save
         User usuarioGuardado = new User();
         usuarioGuardado.setId(1);
-
-        when(userRepository.existsByEmail(userCreate.getEmail())).thenReturn(false);
         when(userRepository.save(any(User.class))).thenReturn(usuarioGuardado);
 
         User result = userService.registrar(userCreate);
